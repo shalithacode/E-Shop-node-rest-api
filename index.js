@@ -18,10 +18,10 @@ const productsRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const ordersRoutes = require("./routes/orders");
 
-app.use("/categories", categoriesRoutes);
-app.use("/products", productsRoutes);
-app.use("/users", usersRoutes);
-app.use("/orders", ordersRoutes);
+app.use("/category", categoriesRoutes);
+app.use("/product", productsRoutes);
+app.use("/user", usersRoutes);
+app.use("/order", ordersRoutes);
 
 mongoose
   .connect(MONGODB_URI)
