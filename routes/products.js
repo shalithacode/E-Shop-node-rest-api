@@ -81,6 +81,7 @@ router.post(`/`, (req, res) => {
       description: req.body.description,
       image: req.body.image,
       images: req.body.images,
+      price: req.body.price,
       category: req.body.category,
       countInStock: req.body.countInStock,
       numReviews: req.body.numReviews,
@@ -110,6 +111,8 @@ router.put("/:id", async (req, res) => {
     product.name = req.body.name || product.name;
     product.description = req.body.description || product.description;
     product.image = req.body.image || product.image;
+    product.price = req.body.price || product.price;
+
     product.images = req.body.images || product.images;
     product.category = req.body.category || product.category;
     product.countInStock = req.body.countInStock || product.countInStock;
