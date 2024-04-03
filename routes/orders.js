@@ -2,7 +2,43 @@ const { OrderItem } = require("../models/Order-item");
 const { Order } = require("../models/order");
 const express = require("express");
 const router = express.Router();
+router.get(`/income`, async (req, res) => {
+  const totalIncome = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
 
+  if (totalIncome.length === 0) {
+    return res
+      .status(500)
+      .json({ success: false, message: "No income data found" });
+  }
+  return res.send(totalIncome.pop());
+});
+router.get(`/count`, async (req, res) => {
+  const orderCount = await Order.countDocuments();
+
+  if (!orderCount) {
+    return res.status(500).json({ success: false });
+  }
+  return res.status(200).json({ count: orderCount });
+});
+router.get(`/user/:id`, async (req, res) => {
+  const orders = await Order.find({ user: req.params.id }).populate({
+    path: "orderItems",
+    populate: "product",
+  });
+  if (!orders) {
+    res
+      .status(404)
+      .json({ success: false, messege: "orders was unable to find." });
+  }
+  res.send(orders);
+});
 router.get(`/`, async (req, res) => {
   const orderList = await Order.find()
     .populate("orderItems")
@@ -109,4 +145,5 @@ router.delete(`/:id`, async (req, res) => {
   if (!deletedOrder) return res.status(500).send("Category cannot deleted!");
   res.status(200).send("Order was deleted");
 });
+
 module.exports = router;
